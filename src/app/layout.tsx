@@ -5,8 +5,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Managed Collections — Professional Rent Recovery for Property Management",
-  description: "A turnkey collections operation for property management. Recover delinquent rent with full transparency and zero upfront cost.",
+  title: "Professional Collections for Property Management",
+  description: "Stop losing revenue to unpaid rent. Professional collections built for property management with full transparency and results in 30 days.",
 };
 
 export default function RootLayout({
