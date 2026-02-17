@@ -289,7 +289,6 @@ export default function Home() {
                   ["Time to Launch", "Live in 2 weeks", "3-6 months to hire and train", "Weeks to onboard, slow ramp"],
                   ["Control Over Process", "Your rules, your scripts, your brand", "Full control but expensive to maintain", "Little to none"],
                   ["Technology", "Enterprise-grade predictive dialer", "Basic phone system", "Varies widely"],
-                  ["Compliance", "Built-in FDCPA + state compliance", "Your liability to manage", "Varies — risk is on you"],
                   ["Scalability", "Scale up or down in days", "Requires new hires", "Rigid contracts"],
                   ["Reporting", "Real-time + weekly", "Whatever your team builds", "Monthly summary at best"],
                 ].map(([label, us, inHouse, agency]) => (
