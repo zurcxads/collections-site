@@ -2,24 +2,9 @@
 
 import { useState, useEffect, useRef, FormEvent } from "react";
 import {
-  Upload,
-  Settings,
-  Users,
-  BarChart3,
-  Phone,
-  Monitor,
-  Mic,
-  ShieldCheck,
-  Mail,
-  FileText,
-  MessageSquare,
-  CheckCircle,
-  Shield,
-  Scale,
-  Eye,
-  Lock,
   ArrowRight,
   ChevronDown,
+  CheckCircle,
 } from "lucide-react";
 
 /* ─── Animated Number ─── */
@@ -32,9 +17,7 @@ function AnimatedNumber({ value, prefix = "", suffix = "" }: { value: number; pr
     const diff = value - start;
     const duration = 400;
     const startTime = performance.now();
-
     if (ref.current) cancelAnimationFrame(ref.current);
-
     function animate(now: number) {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
@@ -42,421 +25,393 @@ function AnimatedNumber({ value, prefix = "", suffix = "" }: { value: number; pr
       setDisplay(Math.round(start + diff * eased));
       if (progress < 1) ref.current = requestAnimationFrame(animate);
     }
-
     ref.current = requestAnimationFrame(animate);
     return () => { if (ref.current) cancelAnimationFrame(ref.current); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
-  return (
-    <span>
-      {prefix}
-      {display.toLocaleString()}
-      {suffix}
-    </span>
-  );
+  return <span>{prefix}{display.toLocaleString()}{suffix}</span>;
 }
 
-/* ─── Section Wrapper ─── */
-function Section({ children, id, className = "" }: { children: React.ReactNode; id?: string; className?: string }) {
-  return (
-    <section id={id} className={`px-6 py-24 md:py-32 max-w-6xl mx-auto ${className}`}>
-      {children}
-    </section>
-  );
-}
-
-/* ─── Card ─── */
-function Card({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <div className={`bg-[#111] border border-white/[0.06] rounded-2xl p-6 md:p-8 ${className}`}>
-      {children}
-    </div>
-  );
-}
-
-/* ─── Main Page ─── */
 export default function Home() {
-  /* ROI Calculator State */
   const [units, setUnits] = useState(500);
   const [delinquencyRate, setDelinquencyRate] = useState(12);
   const [avgRent, setAvgRent] = useState(1200);
 
   const monthlyLoss = Math.round(units * (delinquencyRate / 100) * avgRent);
   const monthlyRecovery = Math.round(monthlyLoss * 0.6);
-  const annualRecovery = monthlyRecovery * 12;
-  const estimatedCost = annualRecovery * 0.15;
-  const annualROI = estimatedCost > 0 ? Math.round(((annualRecovery - estimatedCost) / estimatedCost) * 100) : 0;
+  const annualROI = monthlyLoss > 0 ? Math.round(((monthlyRecovery * 12) / (monthlyLoss * 12)) * 100) : 0;
 
-  /* Contact Form */
   const [formSubmitted, setFormSubmitted] = useState(false);
-
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setFormSubmitted(true);
   }
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-white text-[#1d1d1f]">
+
       {/* ─── NAV ─── */}
-      <nav className="fixed top-0 w-full z-50 bg-[#0a0a0a]/80 backdrop-blur-xl border-b border-white/[0.06]">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="text-lg font-semibold tracking-tight">CollectPro</span>
-          <a
-            href="#contact"
-            className="bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-sm font-medium px-5 py-2.5 rounded-lg transition-colors"
-          >
+      <nav className="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-[#e8e8ed]">
+        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+          <span className="text-base font-semibold tracking-tight text-[#1d1d1f]">Managed Collections</span>
+          <div className="hidden md:flex items-center gap-8 text-[13px] text-[#86868b]">
+            <a href="#problem" className="hover:text-[#1d1d1f] transition-colors">The Problem</a>
+            <a href="#solution" className="hover:text-[#1d1d1f] transition-colors">Solution</a>
+            <a href="#process" className="hover:text-[#1d1d1f] transition-colors">Process</a>
+            <a href="#contact" className="hover:text-[#1d1d1f] transition-colors">Contact</a>
+          </div>
+          <a href="#contact" className="bg-[#1d1d1f] hover:bg-black text-white text-[13px] font-medium px-5 py-2 rounded-full transition-colors">
             Get Started
           </a>
         </div>
       </nav>
 
       {/* ─── HERO ─── */}
-      <section className="pt-32 pb-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
-              Stop Losing Revenue
-              <br />
-              <span className="text-[#2563eb]">to Unpaid Rent</span>
-            </h1>
-            <p className="text-[#888] text-lg md:text-xl max-w-2xl mx-auto">
-              Professional collections built for property management. Full transparency. Results in 30 days.
-            </p>
+      <section className="min-h-screen bg-black text-white flex flex-col items-center justify-center px-6 relative">
+        <div className="max-w-2xl text-center">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-[-0.04em] leading-[0.95] mb-5">
+            Managed<br />Collections.
+          </h1>
+          <p className="text-lg md:text-xl text-white/50 font-light leading-relaxed max-w-lg mx-auto">
+            Professional delinquent rent recovery for property management companies.
+          </p>
+        </div>
+        <div className="absolute bottom-10">
+          <ChevronDown className="w-5 h-5 text-white/30 animate-bounce" />
+        </div>
+      </section>
+
+      {/* ─── PROBLEM ─── */}
+      <section id="problem" className="px-6 py-24 md:py-32">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-[11px] font-semibold tracking-[3px] uppercase text-[#86868b] mb-10">The Problem</p>
+          <h2 className="text-3xl md:text-5xl font-extrabold tracking-[-0.03em] leading-[1.08] mb-4">
+            Delinquent rent costs you<br />more than you think.{" "}
+            <span className="text-[#86868b]">And the current process isn't built to fix it.</span>
+          </h2>
+          <p className="text-base md:text-lg text-[#6e6e73] max-w-xl mb-16 leading-relaxed">
+            Manual dialing, spreadsheet tracking, and overextended staff. It's slow, inconsistent, and every week of delay reduces recovery rates.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+            {[
+              { title: "Manual Dialing", desc: "Individual callers reach a fraction of what a predictive dialer handles. Most delinquent tenants never get a follow-up." },
+              { title: "No Real-Time Visibility", desc: "Spreadsheet tracking means you're always working with yesterday's information. No live view into what's happening." },
+              { title: "Can't Scale", desc: "More properties means more complexity. The current model breaks when your portfolio grows." },
+              { title: "No Accountability", desc: "Without call recordings or tracking, there's no way to verify quality, frequency, or follow-through." },
+              { title: "Team Distraction", desc: "Property managers shouldn't be chasing rent. Every hour on collections is an hour away from operations." },
+              { title: "Revenue Lost to Delay", desc: "The longer a delinquent account sits, the lower the chance of recovery. Speed is everything." },
+            ].map(({ title, desc }, i) => (
+              <div
+                key={title}
+                className={`py-5 pr-6 ${i % 2 === 1 ? "md:pl-6 md:border-l border-[#e8e8ed]" : ""} ${i >= 2 ? "border-t border-[#e8e8ed]" : ""}`}
+              >
+                <h4 className="text-[15px] font-bold text-[#1d1d1f] mb-1">{title}</h4>
+                <p className="text-[13px] text-[#6e6e73] leading-relaxed">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── STATS ─── */}
+      <section className="px-6 py-16 bg-[#f5f5f7]">
+        <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          {[
+            { num: "3–4x", label: "More Contacts Per Hour" },
+            { num: "100%", label: "Call Transparency" },
+            { num: "$0", label: "Upfront Cost" },
+            { num: "2 Wks", label: "To Go Live" },
+          ].map(({ num, label }) => (
+            <div key={label}>
+              <p className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#1d1d1f]">{num}</p>
+              <p className="text-[11px] font-semibold tracking-[1px] uppercase text-[#86868b] mt-1">{label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── SOLUTION ─── */}
+      <section id="solution" className="px-6 py-24 md:py-32">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-[11px] font-semibold tracking-[3px] uppercase text-[#86868b] mb-10">The Solution</p>
+          <h2 className="text-3xl md:text-5xl font-extrabold tracking-[-0.03em] leading-[1.08] mb-4">
+            Everything you need.{" "}
+            <span className="text-[#86868b]">Nothing you don't.</span>
+          </h2>
+          <p className="text-base md:text-lg text-[#6e6e73] max-w-xl mb-16 leading-relaxed">
+            A complete, fully managed collections operation built for one industry — property management. You send accounts. We recover rent.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+            {[
+              { title: "Predictive Dialer", desc: "Enterprise Convoso platform with automated routing, recording, and compliance. 3–4x more live contacts per hour than manual dialing." },
+              { title: "Trained Collections Agents", desc: "Dedicated team trained on your specific procedures, communication standards, and escalation protocols." },
+              { title: "Custom Call Scripts", desc: "Built from your existing guides and loaded into the dialer. Every agent follows your approved process, every time." },
+              { title: "Live Reporting Dashboard", desc: "Real-time view of calls, contacts, commitments, and dollars collected — by property, by agent, by day." },
+              { title: "Quality Assurance", desc: "Call monitoring, scoring, and coaching. Performance improves continuously. Your standards are always maintained." },
+              { title: "Full Audit Trail", desc: "Every call recorded. Every contact attempt logged. Complete documentation accessible anytime." },
+            ].map(({ title, desc }, i) => (
+              <div
+                key={title}
+                className={`py-5 pr-6 ${i % 2 === 1 ? "md:pl-6 md:border-l border-[#e8e8ed]" : ""} ${i >= 2 ? "border-t border-[#e8e8ed]" : ""}`}
+              >
+                <h4 className="text-[15px] font-bold text-[#1d1d1f] mb-1">{title}</h4>
+                <p className="text-[13px] text-[#6e6e73] leading-relaxed">{desc}</p>
+              </div>
+            ))}
           </div>
 
-          {/* ROI Calculator */}
-          <Card className="max-w-3xl mx-auto">
-            <h2 className="text-xl font-semibold mb-8 text-center">Calculate Your Recovery Potential</h2>
+          <div className="mt-16 bg-[#f5f5f7] rounded-2xl px-8 py-6 text-center">
+            <p className="text-[15px] font-medium text-[#1d1d1f] leading-relaxed">
+              We handle the infrastructure, the agents, and the technology.<br />You get the results and the visibility.
+            </p>
+          </div>
+        </div>
+      </section>
 
+      {/* ─── PROCESS ─── */}
+      <section id="process" className="px-6 py-24 md:py-32 bg-[#f5f5f7]">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-[11px] font-semibold tracking-[3px] uppercase text-[#86868b] mb-10">The Process</p>
+          <h2 className="text-3xl md:text-5xl font-extrabold tracking-[-0.03em] leading-[1.08] mb-4">
+            Four steps.{" "}
+            <span className="text-[#86868b]">Total transparency.</span>
+          </h2>
+          <p className="text-base md:text-lg text-[#6e6e73] max-w-xl mb-16 leading-relaxed">
+            A simple, repeatable process designed for clarity at every stage.
+          </p>
+
+          <div className="space-y-0">
+            {[
+              { n: "01", title: "You send us delinquent accounts", desc: "Tenant name, unit, balance, contact info. On whatever schedule works for your team — monthly, weekly, or on demand." },
+              { n: "02", title: "Our agents call using your approved scripts", desc: "The predictive dialer automatically connects agents to tenants — no wasted time on voicemails, busy signals, or wrong numbers. Your scripts are followed on every call." },
+              { n: "03", title: "You see everything in real time", desc: "Live dashboard shows call activity, contact outcomes, payment commitments, and recovered dollars — updated as it happens." },
+              { n: "04", title: "Weekly performance reports", desc: "Recovery rates, agent metrics, call volume, and collected amounts delivered weekly. You always know exactly where things stand." },
+            ].map(({ n, title, desc }) => (
+              <div key={n} className="flex items-start py-6 border-b border-[#d2d2d7] last:border-0">
+                <span className="text-3xl md:text-4xl font-extrabold text-[#d2d2d7] min-w-[70px] leading-none tracking-tight">{n}</span>
+                <div>
+                  <h4 className="text-base font-bold text-[#1d1d1f] mb-1">{title}</h4>
+                  <p className="text-[13px] text-[#6e6e73] leading-relaxed max-w-lg">{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── REPORTING ─── */}
+      <section className="px-6 py-24 md:py-32">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-[11px] font-semibold tracking-[3px] uppercase text-[#86868b] mb-10">Reporting</p>
+          <h2 className="text-3xl md:text-5xl font-extrabold tracking-[-0.03em] leading-[1.08] mb-16">
+            What you'll have<br />access to.
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-0">
+            {[
+              "Real-time dashboard — calls in progress, agent status, daily totals",
+              "Call recordings — every tenant interaction, accessible anytime",
+              "Recovery reports — dollars collected by property and period",
+              "Agent performance — calls per hour, contact rate, conversions",
+              "Disposition logs — documented outcome of every contact attempt",
+              "Weekly executive summary — ready to share with leadership",
+            ].map((item) => (
+              <div key={item} className="flex items-center gap-3 py-4 border-b border-[#f5f5f7]">
+                <div className="w-[6px] h-[6px] rounded-full bg-[#d2d2d7] flex-shrink-0" />
+                <span className="text-[14px] text-[#1d1d1f]">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── TIMELINE ─── */}
+      <section className="px-6 py-24 md:py-32 bg-black text-white">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-[11px] font-semibold tracking-[3px] uppercase text-white/40 mb-10">Timeline</p>
+          <h2 className="text-3xl md:text-5xl font-extrabold tracking-[-0.03em] leading-[1.08] mb-4">
+            Live in two weeks.{" "}
+            <span className="text-white/40">Scale from there.</span>
+          </h2>
+          <p className="text-base md:text-lg text-white/50 max-w-xl mb-16 leading-relaxed">
+            We move fast. From kickoff to live calls in 14 days — dialer configured, agents trained, scripts loaded, dashboard ready.
+          </p>
+
+          <div className="space-y-0">
+            {[
+              { time: "Week 1", title: "Setup & Configuration", desc: "Dialer account, CRM configuration, call scripts built from your guides, agent recruitment begins." },
+              { time: "Week 2", title: "Training & Launch", desc: "Agents trained on your procedures and escalation protocols. Dashboard configured. Go live on initial properties." },
+              { time: "Week 3+", title: "Full Rollout", desc: "Expand across your full portfolio. Scale agent capacity based on volume and recovery targets. Continuous optimization." },
+            ].map(({ time, title, desc }) => (
+              <div key={time} className="flex items-baseline py-6 border-b border-white/10 last:border-0">
+                <span className="text-[11px] font-bold tracking-[1px] uppercase text-white/30 w-24 flex-shrink-0">{time}</span>
+                <div>
+                  <h4 className="text-base font-bold text-white mb-1">{title}</h4>
+                  <p className="text-[13px] text-white/50 leading-relaxed max-w-lg">{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── ROI CALCULATOR ─── */}
+      <section className="px-6 py-24 md:py-32 bg-[#f5f5f7]">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[11px] font-semibold tracking-[3px] uppercase text-[#86868b] mb-10">Calculator</p>
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-[-0.03em]">
+              See your recovery potential.
+            </h2>
+          </div>
+
+          <div className="bg-white rounded-2xl p-8 md:p-10 shadow-sm">
             <div className="space-y-8">
-              {/* Units Slider */}
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="text-sm text-[#888]">Number of Units</label>
-                  <span className="text-sm font-medium">{units.toLocaleString()}</span>
+              {[
+                { label: "Number of Units", value: units, min: 50, max: 5000, step: 10, set: setUnits, format: (v: number) => v.toLocaleString() },
+                { label: "Delinquency Rate", value: delinquencyRate, min: 5, max: 30, step: 1, set: setDelinquencyRate, format: (v: number) => `${v}%` },
+                { label: "Average Monthly Rent", value: avgRent, min: 800, max: 3000, step: 50, set: setAvgRent, format: (v: number) => `$${v.toLocaleString()}` },
+              ].map(({ label, value, min, max, step, set, format }) => (
+                <div key={label}>
+                  <div className="flex justify-between mb-2">
+                    <label className="text-[13px] text-[#86868b]">{label}</label>
+                    <span className="text-[13px] font-semibold text-[#1d1d1f]">{format(value)}</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={min}
+                    max={max}
+                    step={step}
+                    value={value}
+                    onChange={(e) => set(Number(e.target.value))}
+                    className="w-full accent-[#1d1d1f]"
+                  />
                 </div>
-                <input
-                  type="range"
-                  min={50}
-                  max={5000}
-                  step={10}
-                  value={units}
-                  onChange={(e) => setUnits(Number(e.target.value))}
-                />
-              </div>
+              ))}
 
-              {/* Delinquency Slider */}
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="text-sm text-[#888]">Delinquency Rate</label>
-                  <span className="text-sm font-medium">{delinquencyRate}%</span>
-                </div>
-                <input
-                  type="range"
-                  min={5}
-                  max={30}
-                  step={1}
-                  value={delinquencyRate}
-                  onChange={(e) => setDelinquencyRate(Number(e.target.value))}
-                />
-              </div>
-
-              {/* Avg Rent Slider */}
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="text-sm text-[#888]">Average Monthly Rent</label>
-                  <span className="text-sm font-medium">${avgRent.toLocaleString()}</span>
-                </div>
-                <input
-                  type="range"
-                  min={800}
-                  max={3000}
-                  step={50}
-                  value={avgRent}
-                  onChange={(e) => setAvgRent(Number(e.target.value))}
-                />
-              </div>
-
-              {/* Results */}
-              <div className="border-t border-white/[0.06] pt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <p className="text-sm text-[#888] mb-1">Monthly Loss</p>
-                  <p className="text-2xl md:text-3xl font-bold text-red-400">
+              <div className="border-t border-[#e8e8ed] pt-8 grid grid-cols-3 gap-6 text-center">
+                <div>
+                  <p className="text-[11px] font-semibold tracking-[1px] uppercase text-[#86868b] mb-1">Monthly Loss</p>
+                  <p className="text-2xl md:text-3xl font-extrabold text-red-500">
                     <AnimatedNumber value={monthlyLoss} prefix="$" />
                   </p>
                 </div>
-                <div className="text-center">
-                  <p className="text-sm text-[#888] mb-1">We Can Recover</p>
-                  <p className="text-2xl md:text-3xl font-bold text-[#10b981]">
+                <div>
+                  <p className="text-[11px] font-semibold tracking-[1px] uppercase text-[#86868b] mb-1">We Can Recover</p>
+                  <p className="text-2xl md:text-3xl font-extrabold text-[#1d1d1f]">
                     <AnimatedNumber value={monthlyRecovery} prefix="$" suffix="/mo" />
                   </p>
                 </div>
-                <div className="text-center">
-                  <p className="text-sm text-[#888] mb-1">Annual ROI</p>
-                  <p className="text-2xl md:text-3xl font-bold text-[#2563eb]">
+                <div>
+                  <p className="text-[11px] font-semibold tracking-[1px] uppercase text-[#86868b] mb-1">Recovery Rate</p>
+                  <p className="text-2xl md:text-3xl font-extrabold text-[#1d1d1f]">
                     <AnimatedNumber value={annualROI} suffix="%" />
                   </p>
                 </div>
               </div>
 
-              <div className="text-center">
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-medium px-8 py-3.5 rounded-lg transition-colors text-lg"
-                >
-                  Get Your Custom Recovery Plan
-                  <ArrowRight className="w-5 h-5" />
+              <div className="text-center pt-2">
+                <a href="#contact" className="inline-flex items-center gap-2 bg-[#1d1d1f] hover:bg-black text-white font-medium px-8 py-3.5 rounded-full transition-colors">
+                  Get Your Recovery Plan
+                  <ArrowRight className="w-4 h-4" />
                 </a>
               </div>
             </div>
-          </Card>
-
-          <div className="flex justify-center mt-12">
-            <ChevronDown className="w-6 h-6 text-[#888] animate-bounce" />
           </div>
         </div>
       </section>
 
-      {/* ─── PROBLEM ─── */}
-      <Section id="problem">
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-4">The Real Cost of Unpaid Rent</h2>
-        <p className="text-[#888] text-center max-w-2xl mx-auto mb-16">
-          Every month you delay collections, the problem compounds. Internal teams are expensive and
-          inconsistent. Traditional agencies take half your money and give you zero visibility.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card>
-            <p className="text-4xl font-bold text-red-400 mb-2">$2.4M</p>
-            <p className="text-sm text-[#888]">Average annual revenue lost by a 1,000-unit property to delinquent accounts</p>
-          </Card>
-          <Card>
-            <p className="text-4xl font-bold text-red-400 mb-2">480+</p>
-            <p className="text-sm text-[#888]">Hours per year your team spends chasing payments instead of managing properties</p>
-          </Card>
-          <Card>
-            <p className="text-4xl font-bold text-red-400 mb-2">$8,500</p>
-            <p className="text-sm text-[#888]">Average cost per eviction when collections escalate to legal proceedings</p>
-          </Card>
-        </div>
-      </Section>
-
-      {/* ─── HOW IT WORKS ─── */}
-      <Section id="how-it-works">
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-4">How It Works</h2>
-        <p className="text-[#888] text-center max-w-2xl mx-auto mb-16">
-          From data handoff to real-time recovery tracking in four simple steps.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
-          {/* Connecting line (desktop only) */}
-          <div className="hidden md:block absolute top-12 left-[12.5%] right-[12.5%] h-px bg-white/[0.06]" />
-
-          {[
-            { step: 1, icon: Upload, title: "You Send Us the Data", desc: "Securely upload your delinquent accounts. We handle the rest." },
-            { step: 2, icon: Settings, title: "We Build Your Campaign", desc: "Custom scripts, Convoso dialer setup, and agent training tailored to your portfolio." },
-            { step: 3, icon: Users, title: "Dedicated Team Goes Live", desc: "Trained agents begin outreach within 4 weeks. Your accounts, your rules." },
-            { step: 4, icon: BarChart3, title: "Watch Recovery in Real-Time", desc: "Full dashboard access. Every call logged, every dollar tracked." },
-          ].map(({ step, icon: Icon, title, desc }) => (
-            <Card key={step} className="relative text-center">
-              <div className="w-10 h-10 rounded-full bg-[#2563eb] flex items-center justify-center mx-auto mb-4 text-sm font-bold">
-                {step}
-              </div>
-              <Icon className="w-6 h-6 mx-auto mb-3 text-[#888]" />
-              <h3 className="font-semibold mb-2">{title}</h3>
-              <p className="text-sm text-[#888]">{desc}</p>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      {/* ─── COMPARISON ─── */}
-      <Section id="difference">
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-4">The Difference</h2>
-        <p className="text-[#888] text-center max-w-2xl mx-auto mb-16">
-          See how we compare to doing it yourself or hiring a traditional agency.
-        </p>
-
-        <Card className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-white/[0.06]">
-                <th className="text-left py-4 px-4 text-[#888] font-medium" />
-                <th className="text-left py-4 px-4 text-[#2563eb] font-semibold">Us</th>
-                <th className="text-left py-4 px-4 text-[#888] font-medium">In-House</th>
-                <th className="text-left py-4 px-4 text-[#888] font-medium">Collection Agency</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                ["Cost", "Low flat rate", "High (salaries + benefits)", "25-50% commission"],
-                ["Transparency", "Full dashboard", "Limited reporting", "Black box"],
-                ["Speed", "Live in 4 weeks", "Months to hire & train", "Weeks to months"],
-                ["Control", "Your rules, your scripts", "Full but expensive", "None"],
-                ["Technology", "Enterprise dialer", "Basic phone system", "Varies"],
-              ].map(([label, us, inHouse, agency]) => (
-                <tr key={label} className="border-b border-white/[0.06] last:border-0">
-                  <td className="py-4 px-4 font-medium">{label}</td>
-                  <td className="py-4 px-4 text-[#10b981]">{us}</td>
-                  <td className="py-4 px-4 text-[#888]">{inHouse}</td>
-                  <td className="py-4 px-4 text-[#888]">{agency}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </Card>
-      </Section>
-
-      {/* ─── RESULTS ─── */}
-      <Section id="results">
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-16">Results That Speak</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { number: "50-70%", label: "Recovery Rate", desc: "On delinquent accounts within the first 90 days" },
-            { number: "4 Weeks", label: "Time to Go Live", desc: "From data handoff to first calls made" },
-            { number: "100%", label: "Calls Recorded", desc: "Full transparency on every interaction" },
-          ].map(({ number, label, desc }) => (
-            <Card key={label} className="text-center">
-              <p className="text-4xl md:text-5xl font-bold text-[#10b981] mb-2">{number}</p>
-              <p className="font-semibold mb-1">{label}</p>
-              <p className="text-sm text-[#888]">{desc}</p>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      {/* ─── TECHNOLOGY ─── */}
-      <Section id="technology">
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-4">Enterprise Technology, Startup Speed</h2>
-        <p className="text-[#888] text-center max-w-2xl mx-auto mb-16">
-          We invest in the infrastructure so you don&apos;t have to.
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[
-            { icon: Phone, title: "Convoso Dialer", desc: "Enterprise-grade predictive dialer with intelligent call routing and cadence management." },
-            { icon: Monitor, title: "Real-Time Dashboard", desc: "Watch campaign performance, call outcomes, and recovery metrics as they happen." },
-            { icon: Mic, title: "Call Recording", desc: "Every call recorded and stored. Full audit trail for compliance and quality assurance." },
-            { icon: ShieldCheck, title: "Compliance Engine", desc: "Built-in FDCPA compliance checks, time-zone calling windows, and do-not-call management." },
-            { icon: MessageSquare, title: "SMS/Email Automation", desc: "Multi-channel outreach with automated follow-ups to maximize contact rates." },
-            { icon: FileText, title: "Custom Reporting", desc: "Weekly and monthly reports tailored to your KPIs. Export anytime." },
-          ].map(({ icon: Icon, title, desc }) => (
-            <Card key={title}>
-              <Icon className="w-8 h-8 text-[#2563eb] mb-4" />
-              <h3 className="font-semibold mb-2">{title}</h3>
-              <p className="text-sm text-[#888]">{desc}</p>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      {/* ─── COMPLIANCE ─── */}
-      <Section id="compliance">
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-4">Built for Compliance</h2>
-        <p className="text-[#888] text-center max-w-2xl mx-auto mb-16">
-          Collections done wrong creates liability. We do it right.
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { icon: Scale, title: "FDCPA Compliant", desc: "Full adherence to the Fair Debt Collection Practices Act." },
-            { icon: Shield, title: "State Regulations", desc: "We track and comply with state-specific collection laws." },
-            { icon: Eye, title: "Recorded Calls", desc: "100% of calls recorded for quality and compliance review." },
-            { icon: Lock, title: "Dispute Handling", desc: "Proper dispute resolution and validation processes built in." },
-          ].map(({ icon: Icon, title, desc }) => (
-            <Card key={title} className="text-center">
-              <Icon className="w-8 h-8 text-[#10b981] mx-auto mb-4" />
-              <h3 className="font-semibold mb-2">{title}</h3>
-              <p className="text-sm text-[#888]">{desc}</p>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
       {/* ─── CONTACT ─── */}
-      <Section id="contact">
-        <h2 className="text-3xl md:text-5xl font-bold text-center mb-4">Ready to Recover What&apos;s Yours?</h2>
-        <p className="text-[#888] text-center max-w-2xl mx-auto mb-16">
-          Tell us about your portfolio and we&apos;ll put together a custom recovery plan.
-        </p>
+      <section id="contact" className="px-6 py-24 md:py-32">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-[-0.03em] mb-4">
+              Ready to get started?
+            </h2>
+            <p className="text-base md:text-lg text-[#6e6e73] max-w-lg mx-auto leading-relaxed">
+              Tell us about your portfolio and we'll put together a custom recovery plan.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-4xl mx-auto">
-          {/* Form */}
-          <Card>
-            {formSubmitted ? (
-              <div className="text-center py-12">
-                <CheckCircle className="w-12 h-12 text-[#10b981] mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Thank You!</h3>
-                <p className="text-[#888]">We&apos;ll be in touch within 24 hours with your custom recovery plan.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                {[
-                  { name: "name", label: "Name", type: "text" },
-                  { name: "company", label: "Company", type: "text" },
-                  { name: "email", label: "Email", type: "email" },
-                  { name: "phone", label: "Phone", type: "tel" },
-                  { name: "units", label: "Number of Units", type: "number" },
-                ].map(({ name, label, type }) => (
-                  <div key={name}>
-                    <label className="block text-sm text-[#888] mb-1.5">{label}</label>
-                    <input
-                      type={type}
-                      name={name}
-                      required
-                      className="w-full bg-[#0a0a0a] border border-white/[0.06] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2563eb] transition-colors"
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 max-w-4xl mx-auto">
+            <div className="bg-[#f5f5f7] rounded-2xl p-8">
+              {formSubmitted ? (
+                <div className="text-center py-12">
+                  <CheckCircle className="w-10 h-10 text-[#1d1d1f] mx-auto mb-4" />
+                  <h3 className="text-lg font-bold mb-2">Thank you.</h3>
+                  <p className="text-[13px] text-[#6e6e73]">We'll be in touch within 24 hours.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {[
+                    { name: "name", label: "Name", type: "text" },
+                    { name: "company", label: "Company", type: "text" },
+                    { name: "email", label: "Email", type: "email" },
+                    { name: "phone", label: "Phone", type: "tel" },
+                    { name: "units", label: "Number of Units", type: "number" },
+                  ].map(({ name, label, type }) => (
+                    <div key={name}>
+                      <label className="block text-[12px] text-[#86868b] mb-1">{label}</label>
+                      <input
+                        type={type}
+                        name={name}
+                        required
+                        className="w-full bg-white border border-[#e8e8ed] rounded-lg px-4 py-2.5 text-[14px] text-[#1d1d1f] focus:outline-none focus:border-[#1d1d1f] transition-colors"
+                      />
+                    </div>
+                  ))}
+                  <div>
+                    <label className="block text-[12px] text-[#86868b] mb-1">Message</label>
+                    <textarea
+                      name="message"
+                      rows={3}
+                      className="w-full bg-white border border-[#e8e8ed] rounded-lg px-4 py-2.5 text-[14px] text-[#1d1d1f] focus:outline-none focus:border-[#1d1d1f] transition-colors resize-none"
                     />
                   </div>
-                ))}
-                <div>
-                  <label className="block text-sm text-[#888] mb-1.5">Message</label>
-                  <textarea
-                    name="message"
-                    rows={3}
-                    className="w-full bg-[#0a0a0a] border border-white/[0.06] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2563eb] transition-colors resize-none"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="w-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-medium py-3.5 rounded-lg transition-colors"
-                >
-                  Send Recovery Plan Request
-                </button>
-              </form>
-            )}
-          </Card>
+                  <button type="submit" className="w-full bg-[#1d1d1f] hover:bg-black text-white font-medium py-3 rounded-full transition-colors">
+                    Send Recovery Plan Request
+                  </button>
+                </form>
+              )}
+            </div>
 
-          {/* Contact Info */}
-          <div className="flex flex-col justify-center space-y-8">
-            <div>
-              <h3 className="font-semibold mb-1">Email</h3>
-              <a href="mailto:jose@collectpro.com" className="text-[#2563eb] hover:underline">
-                jose@collectpro.com
-              </a>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-1">Phone</h3>
-              <a href="tel:+15551234567" className="text-[#2563eb] hover:underline">
-                (555) 123-4567
-              </a>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-1">Response Time</h3>
-              <p className="text-[#888]">We respond to all inquiries within 24 hours.</p>
+            <div className="flex flex-col justify-center space-y-10">
+              <div>
+                <h3 className="text-[13px] font-bold text-[#1d1d1f] mb-1">Email</h3>
+                <a href="mailto:jose@tamezmg.com" className="text-[14px] text-[#6e6e73] hover:text-[#1d1d1f] transition-colors">
+                  jose@tamezmg.com
+                </a>
+              </div>
+              <div>
+                <h3 className="text-[13px] font-bold text-[#1d1d1f] mb-1">Phone</h3>
+                <a href="tel:+19565782446" className="text-[14px] text-[#6e6e73] hover:text-[#1d1d1f] transition-colors">
+                  (956) 578-2446
+                </a>
+              </div>
+              <div>
+                <h3 className="text-[13px] font-bold text-[#1d1d1f] mb-1">Response Time</h3>
+                <p className="text-[14px] text-[#6e6e73]">All inquiries receive a response within 24 hours.</p>
+              </div>
+              <div>
+                <h3 className="text-[13px] font-bold text-[#1d1d1f] mb-1">No Obligation</h3>
+                <p className="text-[14px] text-[#6e6e73]">Your recovery plan is free. No commitment required.</p>
+              </div>
             </div>
           </div>
         </div>
-      </Section>
+      </section>
 
       {/* ─── FOOTER ─── */}
-      <footer className="border-t border-white/[0.06] py-8 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <span className="text-sm text-[#888]">© {new Date().getFullYear()} CollectPro. All rights reserved.</span>
-          <div className="flex gap-6 text-sm text-[#888]">
-            <a href="#how-it-works" className="hover:text-white transition-colors">How It Works</a>
-            <a href="#results" className="hover:text-white transition-colors">Results</a>
-            <a href="#contact" className="hover:text-white transition-colors">Contact</a>
+      <footer className="border-t border-[#e8e8ed] py-6 px-6">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+          <span className="text-[12px] text-[#86868b]">© {new Date().getFullYear()} Managed Collections.</span>
+          <div className="flex gap-6 text-[12px] text-[#86868b]">
+            <span>Jose Tamez</span>
+            <span>jose@tamezmg.com</span>
+            <span>(956) 578-2446</span>
           </div>
         </div>
       </footer>
