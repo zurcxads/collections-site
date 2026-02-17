@@ -144,6 +144,13 @@ export default function Home() {
                   Get Your Custom Recovery Plan <ArrowRight className="w-5 h-5" />
                 </a>
               </div>
+              <p className="text-[10px] text-[#c7c7cc] text-center mt-4 leading-relaxed">
+                Recovery estimates based on a 60% collection rate, consistent with industry benchmarks from{" "}
+                <a href="https://www.abi.org/" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#86868b] transition-colors">ABI</a>
+                {" and "}
+                <a href="https://www.acainternational.org/" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#86868b] transition-colors">ACA International</a>
+                . Actual results vary by portfolio.
+              </p>
             </div>
           </div>
 
@@ -156,7 +163,7 @@ export default function Home() {
       {/* ─── WHY US ─── */}
       <section className="border-y border-[#e8e8ed] bg-[#f5f5f7]">
         <div className="px-6 py-20 md:py-28 max-w-6xl mx-auto">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-center mb-3 tracking-tight">Why Property Managers Choose Us</h2>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-center mb-3 tracking-tight">Built Different From Day One</h2>
           <p className="text-[#86868b] text-center max-w-2xl mx-auto mb-14">
             We built this service from the ground up for one industry. Every process, every script, every metric is designed for property management collections.
           </p>
@@ -195,6 +202,16 @@ export default function Home() {
               <p className="text-sm text-[#86868b]">{desc}</p>
             </div>
           ))}
+          <div className="col-span-full mt-6 text-center">
+            <p className="text-[11px] text-[#c7c7cc]">
+              Sources:{" "}
+              <a href="https://www.nmhc.org/research-insight/nmhc-rent-payment-tracker/" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#86868b] transition-colors">NMHC Rent Payment Tracker</a>
+              {" · "}
+              <a href="https://ipropertymanagement.com/research/average-eviction-cost" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#86868b] transition-colors">iPropertyManagement Eviction Cost Study</a>
+              {" · "}
+              <a href="https://www.transunion.com/industry/collections" target="_blank" rel="noopener noreferrer" className="underline hover:text-[#86868b] transition-colors">TransUnion Collections Industry Report</a>
+            </p>
+          </div>
         </div>
       </section>
 
